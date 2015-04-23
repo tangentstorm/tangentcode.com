@@ -1,0 +1,9 @@
+html { font-family:verdana,arial,sans-serif; background: #336699; }
+html, body { padding: 0; margin: 0; overflow:hidden; }
+h1 { color:#ccc; background:black; width:100%; margin:0; font-size:16pt;}
+h1 strong { color:white; }
+#stage { }
+.bit { r: 32px; stroke:black; stroke-width:2px; }
+.bit.o { fill:#eee; }
+.bit.l { fill:#333; }
+
