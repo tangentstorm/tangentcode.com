@@ -8,7 +8,15 @@
   <script type="text/coffeescript" src="bits.cf"></script>
 <body>
   <h1>All About <strong>Bits</strong></h1>
-  <svg id="stage">
+  <svg>
+    <defs>
+      <filter id="shadow" width="200%" height="200%">
+        <feOffset dx="2" dy="2" in="SourceAlpha"/>
+        <feGaussianBlur result="blur" stdDeviation="1.5"/>
+        <feBlend in="SourceGraphic" in2="blur" mode="normal"/>
+      </filter>
+    </defs>
+    <g id="stage"/>
   </svg>
 </body>
 </html>

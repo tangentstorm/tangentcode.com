@@ -28,6 +28,7 @@ resize_svg()
 bits = d3.select("#stage").selectAll("circle")
 bits.data(d)
   .enter().append('circle').attr
+    filter: "url(#shadow)"
     class: (d)->"bit #{if d[0] then 'l' else 'o'}"
     cx   : (d)->d[1]
     cy   : (d)->d[2]
