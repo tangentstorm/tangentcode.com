@@ -16,7 +16,9 @@ bitOrigin = ->
 
 onDrag = d3.behavior.drag()
   .origin bitOrigin
-  .on 'dragend', -> d3.event.preventDefault()
+  .on 'dragend', ->
+    e = d3.event.sourceEvent
+    if e.movementX or e.movementY then e.preventDefault()
   .on "drag", drag
 
 bitColor = (d)-> if d[0] then '#333' else '#eee'
