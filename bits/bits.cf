@@ -1,36 +1,56 @@
 # scene data
-d = [
- [0, 100, 100]
- [1, 110, 110]]
+data = [
+	[0, 100, 100, 0]
+ 	[0, 250, 100, 1]
+	[1, 150, 110, 0]]
 
 # drag and drop helpers
-drag = (d)->
+drag = ->
   d3.select(this).attr
-    cx: d3.event.x
-    cy: d3.event.y
+    x: d3.event.x
+    y: d3.event.y
 
-bitOrigin = (d)->
-   bit = d3.select(this)
-   x: bit.attr('cx')
-   y: bit.attr('cy')
+bitOrigin = ->
+  bit = d3.select(this)
+  x: bit.attr('x'), y: bit.attr('y')
 
-drag = d3.behavior.drag().origin(bitOrigin).on("drag", drag)
+onDrag = d3.behavior.drag()
+  .origin bitOrigin
+  .on 'dragend', -> d3.event.preventDefault()
+  .on "drag", drag
 
-resize_svg = ()->
+bitColor = (d)-> if d[0] then '#333' else '#eee'
+bitShape = (d)-> if d[3] then 1 else 16
+
+resize_svg = ->
   html = document.querySelector('html')
   h1   = document.querySelector('h1')
   d3.select('svg').style
     border: 'none'
     height: html.clientHeight - h1.clientHeight
     width : html.clientWidth
+
+# main program
 resize_svg()
 
-bits = d3.select("#stage").selectAll("circle")
-bits.data(d)
-  .enter().append('circle').attr
-    filter: "url(#shadow)"
-    class: (d)->"bit #{if d[0] then 'l' else 'o'}"
-    cx   : (d)->d[1]
-    cy   : (d)->d[2]
-    r    : 16
-  .call drag
+bits = d3.select('#stage').selectAll('rect').data(data)
+bits.enter().append 'rect'
+	.attr
+    filter: 'url(#shadow)'
+    width: 32, height: 32
+    fill: bitColor
+    rx: bitShape, ry: bitShape
+    x: (d)->d[1]
+    y: (d)->d[2]
+  .on 'click', (d)->
+    if not d3.event.defaultPrevented
+      d[0] = 1-d[0]
+      d3.select(this).transition().duration(100).attr fill: bitColor
+  .on 'dblclick', (d)->
+    d[3] = 1-d[3]
+    d3.select(this).transition()
+	  	.ease 'linear'
+    	.duration 300
+    	.attr rx: bitShape, ry: bitShape
+  .call onDrag
+
